@@ -222,7 +222,7 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  LabelTip.Caption    := 'TIPS:'#10'1. Folders are scanned recursively.'#10#10'2. Each folder listed is designated as a root folder where an output file is saved.';
+  LabelTip.Caption    := 'TIPS:'#10'1. Folders are scanned recursively.'#10#10'2. Each listed folder is designated as a root folder where an output file is saved.';
   PanelStatus.Caption := HashStatus[HashIdle];
 end;
 
