@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, FolderBrowser, StdCtrls, TntStdCtrls, ExtCtrls, TntExtCtrls,
-  ComCtrls, tntclasses, tntsysutils;
+  ComCtrls, tntclasses, tntsysutils, XPMan;
 
 type
   TMainForm = class(TForm)
@@ -19,6 +19,7 @@ type
     LabelTip: TTntLabel;
     ProgressBar: TProgressBar;
     PanelStatus: TTntPanel;
+    XPManifest: TXPManifest;
     procedure AddFolderButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ClearButtonClick(Sender: TObject);
@@ -98,7 +99,7 @@ begin
     Hash2Ofs := Stream.Size-(1 shl 20); // Hash2 offset is 1024KiB from the end of the file
   End;
 
-  If Hash1Ofs > 0 then
+  If Hash1Ofs <> 0 then
   Begin
     // Hash1:
     Stream.Position:= Hash1Ofs;
@@ -138,7 +139,8 @@ begin
     Repeat
       If (sRec.Attr and faDirectory = faDirectory) then
       Begin
-        ScanForAudioFiles(srcPath+sRec.Name,fileList);
+        If (sRec.Name <> '.') and (sRec.Name <> '..') then
+          ScanForAudioFiles(srcPath+sRec.Name,fileList);
       End
         else
       If (sRec.Attr and faVolumeID = 0) then
@@ -194,7 +196,11 @@ begin
       Except
         fStream := nil
       End;
-      If fStream <> nil then sList.SaveToStream(fStream);
+      If fStream <> nil then
+      Begin
+        sList.SaveToStream(fStream);
+        fStream.Free;
+      End;
     End;
     sList.Free;
   End;
@@ -253,17 +259,21 @@ begin
 
       If fList.Count > 0 then
       Begin
+        ProgressBar.Max := fList.Count-1;
         For I1 := 0 to fList.Count-1 do
         Begin
+          ProgressBar.Position := I1;
           New(nEntry);
-          CalcGabestHash(fList[I1],nEntry^.hrHash1,nEntry^.hrHash1);
-          If nEntry^.hrHash1 > 0 then
+          CalcGabestHash(fList[I1],nEntry^.hrHash1,nEntry^.hrHash2);
+          If nEntry^.hrHash1 <> 0 then
           Begin
             nEntry^.hrFileName := fList[I1];
+            oList.Add(nEntry);
           End
           Else Dispose(nEntry);
         End;
         SaveHashOutput(oList,FolderList.Items[I],OutputFormatCB.ItemIndex);
+        ProgressBar.Position := ProgressBar.Max;
 
         For I1 := 0 to oList.Count-1 do Dispose(PHashRecord(oList[I1]));
         oList.Clear;
