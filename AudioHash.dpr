@@ -21,6 +21,10 @@
 
         And code snippets from Yanniel Alvarez :
         http://www.yanniel.info/2012/01/open-subtitles-api-in-delphi.html
+
+        And the MediaInfo DLL and Headers to read the ID3/TAG meta-data:
+        https://mediaarea.net/en/MediaInfo
+        - tested with v0.7.92.1 of "mediainfo.dll"
         }
 
 
@@ -31,7 +35,8 @@ uses
   FastMove,
   FastCode,
   Forms,
-  MainUnit in 'MainUnit.pas' {MainForm};
+  MainUnit in 'MainUnit.pas' {MainForm},
+  misc_utils_unit in 'misc_utils_unit.pas';
 
 {$R *.res}
 

@@ -12,6 +12,7 @@ object MainForm: TMainForm
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnClose = FormClose
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -37,6 +38,8 @@ object MainForm: TMainForm
     Width = 227
     Height = 293
     ItemHeight = 13
+    Items.Strings = (
+      'e:\Music\Hebrew\Ehud Banai\')
     TabOrder = 0
   end
   object AddFolderButton: TTntButton
