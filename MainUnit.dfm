@@ -2,7 +2,7 @@ object MainForm: TMainForm
   Left = 458
   Top = 254
   BorderStyle = bsDialog
-  Caption = 'AudioHash v1.00 by Yaron Gur / Inmatrix.com'
+  Caption = 'AudioHash v1.01 by Yaron Gur / Inmatrix.com'
   ClientHeight = 362
   ClientWidth = 400
   Color = clBtnFace
@@ -38,8 +38,6 @@ object MainForm: TMainForm
     Width = 227
     Height = 293
     ItemHeight = 13
-    Items.Strings = (
-      'e:\Music\Hebrew\Ehud Banai\')
     TabOrder = 0
   end
   object AddFolderButton: TTntButton
@@ -67,9 +65,9 @@ object MainForm: TMainForm
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
-    ItemIndex = 0
+    ItemIndex = 1
     TabOrder = 3
-    Text = 'Comma separated CSV'
+    Text = 'XML'
     Items.Strings = (
       'Comma separated CSV'
       'XML')

@@ -118,7 +118,11 @@ begin
           // Validate successful hashing
           If nEntry^.hrHash1 <> 0 then
           Begin
-            nEntry^.hrFileName := fList[I1];
+            // Get File Path
+            nEntry^.hrFilePath := WideExtractFilePath(fList[I1]);
+
+            // Get File Name
+            nEntry^.hrFileName := WideExtractFileName(fList[I1]);
 
             // Get File Size
             nEntry^.hrFileSize := GetFileSize(nEntry^.hrFileName);
@@ -127,7 +131,7 @@ begin
             nEntry^.hrFileExt  := Lowercase(ExtractFileExt(nEntry^.hrFileName));
             If Length(nEntry^.hrFileExt) > 0 then If nEntry^.hrFileExt[1] = '.' then Delete(nEntry^.hrFileExt,1,1);
 
-            // Load TAG/ID3 data
+            // Get TAG/ID3 data
             If MediaInfoLoaded = True then MediaInfo_ProccessTAGdata(nEntry^.hrFileName,nEntry);
 
             oList.Add(nEntry);

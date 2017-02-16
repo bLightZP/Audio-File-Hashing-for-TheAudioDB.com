@@ -19,6 +19,7 @@ const
 Type
   THashRecord =
   Record
+    hrFilePath     : WideString;
     hrFileName     : WideString;
     hrFileExt      : WideString;
     hrFileSize     : Int64;
@@ -92,6 +93,7 @@ procedure ResetHashRecord(HashRec : PHashRecord);
 begin
   With HashRec^ do
   Begin
+    hrFilePath     := '';
     hrFileName     := '';
     hrFileExt      := '';
     hrFileSize     := -1;
@@ -230,7 +232,7 @@ begin
         outFile := savePath+'AudioHash.csv';
         For I := 0 to outList.Count-1 do with PHashRecord(outList[I])^ do
         Begin
-          S := '"'+UTF8Encode(hrFileName)    +'","'+hrFileExt+'",'+IntToStr(hrFileSize)+','+IntToHex(hrHash1,16)+','+IntToHex(hrHash2,16)+','+BoolToStr(hrImage,True)+','+
+          S := '"'+UTF8Encode(hrFilePath)+'","'+UTF8Encode(hrFileName)    +'","'+hrFileExt+'",'+IntToStr(hrFileSize)+','+IntToHex(hrHash1,16)+','+IntToHex(hrHash2,16)+','+BoolToStr(hrImage,True)+','+
                // Meta-Data:
                '"'+UTF8Encode(hrTrack)       +'",'+
                '"'+UTF8Encode(hrGenre)       +'",'+
@@ -254,7 +256,7 @@ begin
         sList.Add('<audiohash>');
         For I := 0 to outList.Count-1 do With PHashRecord(outList[I])^ do
         Begin
-          S := #9'<entry filename="'+UTF8Encode(hrFileName)+'" fileext="'+hrFileExt+'" filesize="'+IntToStr(hrFileSize)+'" hash1="'+IntToHex(hrHash1,16)+'" hash2="'+IntToHex(hrHash2,16)+'" image="'+BoolToStr(hrImage,True)+'" ';
+          S := #9'<entry filepath="'+UTF8Encode(hrFilePath)+'" filename="'+UTF8Encode(hrFileName)+'" fileext="'+hrFileExt+'" filesize="'+IntToStr(hrFileSize)+'" hash1="'+IntToHex(hrHash1,16)+'" hash2="'+IntToHex(hrHash2,16)+'" image="'+BoolToStr(hrImage,True)+'" ';
 
           // Meta-Data:
           If hrTrack        <> '' then S := S+'Track="'       +UTF8Encode(hrTrack)       +'" ';
