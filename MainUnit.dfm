@@ -2,7 +2,7 @@ object MainForm: TMainForm
   Left = 458
   Top = 254
   BorderStyle = bsDialog
-  Caption = 'AudioHash v1.01 by Yaron Gur / Inmatrix.com'
+  Caption = 'AudioHash v1.02 by Yaron Gur / Inmatrix.com'
   ClientHeight = 362
   ClientWidth = 400
   Color = clBtnFace
