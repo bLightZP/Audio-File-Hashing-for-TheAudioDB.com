@@ -13,7 +13,9 @@ object MainForm: TMainForm
   Font.Style = []
   OldCreateOrder = False
   OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  OnMouseDown = FormMouseDown
   PixelsPerInch = 96
   TextHeight = 13
   object LabeOutput: TTntLabel
@@ -23,6 +25,7 @@ object MainForm: TMainForm
     Height = 13
     Alignment = taCenter
     Caption = 'Output format :'
+    OnMouseDown = FormMouseDown
   end
   object LabelTip: TTntLabel
     Left = 248
@@ -31,6 +34,7 @@ object MainForm: TMainForm
     Height = 110
     AutoSize = False
     WordWrap = True
+    OnMouseDown = FormMouseDown
   end
   object FolderList: TTntListBox
     Left = 12
@@ -38,7 +42,7 @@ object MainForm: TMainForm
     Width = 227
     Height = 293
     ItemHeight = 13
-    TabOrder = 0
+    TabOrder = 4
   end
   object AddFolderButton: TTntButton
     Left = 248
@@ -66,7 +70,7 @@ object MainForm: TMainForm
     Style = csDropDownList
     ItemHeight = 13
     ItemIndex = 1
-    TabOrder = 3
+    TabOrder = 0
     Text = 'XML'
     Items.Strings = (
       'Comma separated CSV'
@@ -78,7 +82,7 @@ object MainForm: TMainForm
     Width = 140
     Height = 50
     Caption = 'Start Hashing'
-    TabOrder = 4
+    TabOrder = 3
     OnClick = HashButtonClick
   end
   object ProgressBar: TProgressBar
@@ -89,6 +93,7 @@ object MainForm: TMainForm
     Max = 10000
     Smooth = True
     TabOrder = 5
+    OnMouseDown = FormMouseDown
   end
   object PanelStatus: TTntPanel
     Left = 12
@@ -97,6 +102,7 @@ object MainForm: TMainForm
     Height = 21
     BevelOuter = bvNone
     TabOrder = 6
+    OnMouseDown = FormMouseDown
   end
   object FolderBrowser: TFolderBrowser
     BrowseFlags = [bfUseNewUI]

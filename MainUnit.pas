@@ -25,6 +25,9 @@ type
     procedure ClearButtonClick(Sender: TObject);
     procedure HashButtonClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure FormMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     { Private declarations }
   public
@@ -94,21 +97,25 @@ var
 begin
   If FolderList.Count > 0 then
   Begin
+    HashButton.Enabled := False;
     fList := TTNTStringList.Create;
     oList := TList.Create;
     For I := 0 to FolderList.Count-1 do
     Begin
       ProgressBar.Position := 0;
-      PanelStatus.Caption  := HashStatus[HashProcessing]+' '+FolderList.Items[I];
-
+      PanelStatus.Caption  := HashStatus[HashScanning]+' '+FolderList.Items[I];
+      Application.ProcessMessages;
       ScanForAudioFiles(FolderList.Items[I],fList);
 
       If fList.Count > 0 then
       Begin
-        ProgressBar.Max := fList.Count-1;
+        ProgressBar.Max     := fList.Count-1;
+        PanelStatus.Caption := HashStatus[HashProcessing]+' '+FolderList.Items[I];
+        Application.ProcessMessages;
         For I1 := 0 to fList.Count-1 do
         Begin
           ProgressBar.Position := I1;
+          Application.ProcessMessages;
           New(nEntry);
           ResetHashRecord(nEntry);
 
@@ -148,6 +155,7 @@ begin
     End;
     oList.Free;
     fList.Free;
+    HashButton.Enabled := True;
   End;
   PanelStatus.Caption := HashStatus[HashComplete];
 end;
@@ -159,6 +167,19 @@ begin
   Begin
     MediaInfoDLL_UnLoad;
   End;
+end;
+
+
+procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  CanClose := HashButton.Enabled;
+end;
+
+procedure TMainForm.FormMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  ReleaseCapture;
+  SendMessage(MainForm.Handle,WM_SYSCOMMAND,$F012,0);
 end;
 
 end.
