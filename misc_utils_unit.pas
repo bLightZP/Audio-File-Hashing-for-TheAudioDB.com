@@ -91,18 +91,18 @@ begin
   If MediaInfo_Open(miHandle, PWideChar(FileName)) = 1 then With HashRec^ do
   Begin
     hrImage        :=            MediaInfo_Get(miHandle, Stream_General, 0, 'Cover_Data'         , Info_Text, Info_Name) <> '';
-    hrTrack        := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Track'              , Info_Text, Info_Name)),False);
-    hrGenre        := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Genre'              , Info_Text, Info_Name)),False);
-    hrTrackNumber  := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Track/Position'     , Info_Text, Info_Name)),False);
-    hrPerformer    := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Performer'          , Info_Text, Info_Name)),False);
-    hrAlbum        := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Album'              , Info_Text, Info_Name)),False);
-    hrRecordedDate := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Recorded_Date'      , Info_Text, Info_Name)),False);
-    hrWrittenBy    := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'WrittenBy'          , Info_Text, Info_Name)),False);
-    hrEncodedApp   := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Encoded_Application', Info_Text, Info_Name)),False);
-    hrEncodedLib   := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Encoded_Library'    , Info_Text, Info_Name)),False);
-    hrComment      := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Comment'            , Info_Text, Info_Name)),False);
-    hrURL          := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Track/Url'          , Info_Text, Info_Name)),False);
-    hrCopyright    := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Copyright'          , Info_Text, Info_Name)),False);
+    hrTrack        := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Track'              , Info_Text, Info_Name)),True);
+    hrGenre        := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Genre'              , Info_Text, Info_Name)),True);
+    hrTrackNumber  := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Track/Position'     , Info_Text, Info_Name)),True);
+    hrPerformer    := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Performer'          , Info_Text, Info_Name)),True);
+    hrAlbum        := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Album'              , Info_Text, Info_Name)),True);
+    hrRecordedDate := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Recorded_Date'      , Info_Text, Info_Name)),True);
+    hrWrittenBy    := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'WrittenBy'          , Info_Text, Info_Name)),True);
+    hrEncodedApp   := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Encoded_Application', Info_Text, Info_Name)),True);
+    hrEncodedLib   := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Encoded_Library'    , Info_Text, Info_Name)),True);
+    hrComment      := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Comment'            , Info_Text, Info_Name)),True);
+    hrURL          := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Track/Url'          , Info_Text, Info_Name)),True);
+    hrCopyright    := EncodeTextTags(UTF8Decode(MediaInfo_Get(miHandle, Stream_General, 0, 'Copyright'          , Info_Text, Info_Name)),True);
     MediaInfo_Close(miHandle);
     Result := True;
   End;
@@ -255,9 +255,9 @@ begin
         outFile := savePath+'AudioHash.csv';
         For I := 0 to outList.Count-1 do with PHashRecord(outList[I])^ do
         Begin
-          S := '"'+UTF8Encode(EncodeTextTags(hrFilePath,False))+'",'+
-               '"'+UTF8Encode(EncodeTextTags(hrFileName,False))+'",'+
-               '"'+UTF8Encode(EncodeTextTags(hrFileExt,False))+'",'+IntToStr(hrFileSize)+','+IntToHex(hrHash1,16)+','+IntToHex(hrHash2,16)+','+BoolToStr(hrImage,True)+','+
+          S := '"'+UTF8Encode(EncodeTextTags(hrFilePath,True))+'",'+
+               '"'+UTF8Encode(EncodeTextTags(hrFileName,True))+'",'+
+               '"'+UTF8Encode(EncodeTextTags(hrFileExt,True))+'",'+IntToStr(hrFileSize)+','+IntToHex(hrHash1,16)+','+IntToHex(hrHash2,16)+','+BoolToStr(hrImage,True)+','+
                // Meta-Data:
                '"'+UTF8Encode(hrTrack)       +'",'+
                '"'+UTF8Encode(hrGenre)       +'",'+
@@ -281,7 +281,13 @@ begin
         sList.Add('<audiohash>');
         For I := 0 to outList.Count-1 do With PHashRecord(outList[I])^ do
         Begin
-          S := #9'<entry filepath="'+UTF8Encode(hrFilePath)+'" filename="'+UTF8Encode(hrFileName)+'" fileext="'+hrFileExt+'" filesize="'+IntToStr(hrFileSize)+'" hash1="'+IntToHex(hrHash1,16)+'" hash2="'+IntToHex(hrHash2,16)+'" image="'+BoolToStr(hrImage,True)+'" ';
+          S := #9'<entry filepath="'+UTF8Encode(EncodeTextTags(hrFilePath,True))+'"'+
+                       ' filename="'+UTF8Encode(EncodeTextTags(hrFileName,True))+'"'+
+                       ' fileext="' +UTF8Encode(EncodeTextTags(hrFileExt,True))+'"'+
+                       ' filesize="'+IntToStr(hrFileSize)+'"'+
+                       ' hash1="'   +IntToHex(hrHash1,16)+'"'+
+                       ' hash2="'   +IntToHex(hrHash2,16)+'"'+
+                       ' image="'   +BoolToStr(hrImage,True)+'" ';
 
           // Meta-Data:
           If hrTrack        <> '' then S := S+'Track="'       +UTF8Encode(hrTrack)       +'" ';
