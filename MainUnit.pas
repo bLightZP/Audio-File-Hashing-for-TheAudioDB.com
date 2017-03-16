@@ -157,7 +157,8 @@ begin
     fList.Free;
     HashButton.Enabled := True;
   End;
-  PanelStatus.Caption := HashStatus[HashComplete];
+  PanelStatus.Caption  := HashStatus[HashComplete];
+  ProgressBar.Position := 0;
 end;
 
 

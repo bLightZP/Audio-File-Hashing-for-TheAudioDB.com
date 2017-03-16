@@ -255,9 +255,9 @@ begin
         outFile := savePath+'AudioHash.csv';
         For I := 0 to outList.Count-1 do with PHashRecord(outList[I])^ do
         Begin
-          S := '"'+UTF8Encode(EncodeTextTags(hrFilePath,True))+'",'+
+          S := //'"'+UTF8Encode(EncodeTextTags(hrFilePath,True))+'",'+
                '"'+UTF8Encode(EncodeTextTags(hrFileName,True))+'",'+
-               '"'+UTF8Encode(EncodeTextTags(hrFileExt,True))+'",'+IntToStr(hrFileSize)+','+IntToHex(hrHash1,16)+','+IntToHex(hrHash2,16)+','+BoolToStr(hrImage,True)+','+
+               '"'+UTF8Encode(EncodeTextTags(hrFileExt,True))+'",'+IntToStr(hrFileSize)+','+IntToHex(hrHash1,16)+','+IntToHex(hrHash2,16)+','+{BoolToStr(hrImage,True)+','+}
                // Meta-Data:
                '"'+UTF8Encode(hrTrack)       +'",'+
                '"'+UTF8Encode(hrGenre)       +'",'+
@@ -266,11 +266,11 @@ begin
                '"'+UTF8Encode(hrAlbum)       +'",'+
                '"'+UTF8Encode(hrRecordedDate)+'",'+
                '"'+UTF8Encode(hrWrittenBy)   +'",'+
-               '"'+UTF8Encode(hrEncodedApp)  +'",'+
-               '"'+UTF8Encode(hrEncodedLib)  +'",'+
-               '"'+UTF8Encode(hrComment)     +'",'+
-               '"'+UTF8Encode(hrURL)         +'",'+
-               '"'+UTF8Encode(hrCopyright)   +'"';
+               '"'+UTF8Encode(hrEncodedApp)  +'",';
+               //'"'+UTF8Encode(hrEncodedLib)  +'",'+
+               //'"'+UTF8Encode(hrComment)     +'",'+
+               //'"'+UTF8Encode(hrURL)         +'",'+
+               //'"'+UTF8Encode(hrCopyright)   +'"';
           sList.Add(S);
         End;
       End;
@@ -281,13 +281,14 @@ begin
         sList.Add('<audiohash>');
         For I := 0 to outList.Count-1 do With PHashRecord(outList[I])^ do
         Begin
-          S := #9'<entry filepath="'+UTF8Encode(EncodeTextTags(hrFilePath,True))+'"'+
+          S := #9'<entry'+
+                       //' filepath="'+UTF8Encode(EncodeTextTags(hrFilePath,True))+'"'+
                        ' filename="'+UTF8Encode(EncodeTextTags(hrFileName,True))+'"'+
                        ' fileext="' +UTF8Encode(EncodeTextTags(hrFileExt,True))+'"'+
                        ' filesize="'+IntToStr(hrFileSize)+'"'+
                        ' hash1="'   +IntToHex(hrHash1,16)+'"'+
-                       ' hash2="'   +IntToHex(hrHash2,16)+'"'+
-                       ' image="'   +BoolToStr(hrImage,True)+'" ';
+                       ' hash2="'   +IntToHex(hrHash2,16)+'" '{+
+                       ' image="'   +BoolToStr(hrImage,True)+'" '};
 
           // Meta-Data:
           If hrTrack        <> '' then S := S+'Track="'       +UTF8Encode(hrTrack)       +'" ';
@@ -298,10 +299,10 @@ begin
           If hrRecordedDate <> '' then S := S+'RecordedDate="'+UTF8Encode(hrRecordedDate)+'" ';
           If hrWrittenBy    <> '' then S := S+'WrittenBy="'   +UTF8Encode(hrWrittenBy)   +'" ';
           If hrEncodedApp   <> '' then S := S+'EncodedApp="'  +UTF8Encode(hrEncodedApp)  +'" ';
-          If hrEncodedLib   <> '' then S := S+'EncodedLib="'  +UTF8Encode(hrEncodedLib)  +'" ';
-          If hrComment      <> '' then S := S+'Comment="'     +UTF8Encode(hrComment)     +'" ';
-          If hrURL          <> '' then S := S+'URL="'         +UTF8Encode(hrURL)         +'" ';
-          If hrCopyright    <> '' then S := S+'Copyright="'   +UTF8Encode(hrCopyright)   +'" ';
+          //If hrEncodedLib   <> '' then S := S+'EncodedLib="'  +UTF8Encode(hrEncodedLib)  +'" ';
+          //If hrComment      <> '' then S := S+'Comment="'     +UTF8Encode(hrComment)     +'" ';
+          //If hrURL          <> '' then S := S+'URL="'         +UTF8Encode(hrURL)         +'" ';
+          //If hrCopyright    <> '' then S := S+'Copyright="'   +UTF8Encode(hrCopyright)   +'" ';
 
           S := S+'/>';
 
